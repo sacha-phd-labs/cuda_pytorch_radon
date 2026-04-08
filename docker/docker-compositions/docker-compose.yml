@@ -1,3 +1,25 @@
+version: '3.9'
+
+x-pytorch_cuda_base: &pytorch_cuda_base
+  # GPU support (requires Docker Engine and NVIDIA Container Toolkit)
+  gpus: all
+  shm_size: 8g
+  environment:
+    PYTHONUNBUFFERED: "1"
+    MLFLOW_TRACKING_URI: "http://mlflow:5000"
+  depends_on:
+    - mlflow
+  volumes:
+    # bind development project workspace into container
+    - /home/sacha.bouchez-delotte/development:/workspace
+    - /home/sacha.bouchez-delotte/mlflow:/mlflow
+  networks:
+    - mlflow-net
+  restart: unless-stopped
+  # run as the non-root user created in the Dockerfile (UID 1001)
+  user: "1001:1001"
+  tty: true
+
 services:
   mlflow:
     image: ghcr.io/mlflow/mlflow:latest
@@ -18,27 +40,16 @@ services:
     networks:
       - mlflow-net
 
-  dev:
-    container_name: pytorch_cuda_dev-runtime
+  pytorch_cuda_radon-runtime:
+    <<: *pytorch_cuda_base
+    container_name: pytorch_cuda_radon-runtime
     build:
       context: ../dockerfiles/cuda_pytorch
       dockerfile: Dockerfile
-    image: pytorch2.9.0-cuda12.8-cudnn9-runtime:latest
-    # GPU support (requires Docker Engine and NVIDIA Container Toolkit)
-    gpus: all
-    environment:
-      PYTHONUNBUFFERED: "1"
-    volumes:
-      # bind development project workspace into container
-      - /home/sacha.bouchez-delotte/development:/workspace
-      - /home/sacha.bouchez-delotte/mlflow:/mlflow
-    networks:
-      - mlflow-net
-    restart: unless-stopped
-    # run as the non-root user created in the Dockerfile (UID 1001)
-    user: "1001:1001"
-    tty: true
+    image: pytorch_cuda_radon-runtime:latest
 
 networks:
   mlflow-net:
+    name: mlflow-net
     driver: bridge
+    attachable: true
