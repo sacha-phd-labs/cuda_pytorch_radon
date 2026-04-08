@@ -9,10 +9,6 @@ x-pytorch_cuda_base: &pytorch_cuda_base
     MLFLOW_TRACKING_URI: "http://mlflow:5000"
   depends_on:
     - mlflow
-  volumes:
-    # bind development project workspace into container
-    - /home/sacha.bouchez-delotte/development:/workspace
-    - /home/sacha.bouchez-delotte/mlflow:/mlflow
   networks:
     - mlflow-net
   restart: unless-stopped
@@ -33,20 +29,15 @@ services:
       --backend-store-uri sqlite:////mlflow/mlflow.db
       --default-artifact-root /mlflow/artifacts
       --allowed-hosts "*"
-    volumes:
-      - /home/sacha.bouchez-delotte/mlflow:/mlflow
     restart: unless-stopped
 
     networks:
       - mlflow-net
 
-  pytorch_cuda_radon-runtime:
+  pytorch_cuda_radon:
     <<: *pytorch_cuda_base
-    container_name: pytorch_cuda_radon-runtime
-    build:
-      context: ../dockerfiles/cuda_pytorch
-      dockerfile: Dockerfile
-    image: pytorch_cuda_radon-runtime:latest
+    container_name: pytorch_cuda_radon
+    image: ghcr.io/sacha-phd-labs/pytorch_cuda_radon:latest
 
 networks:
   mlflow-net:
