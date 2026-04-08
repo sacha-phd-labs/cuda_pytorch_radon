@@ -74,5 +74,8 @@ USER $USERNAME
 COPY src/entrypoint.sh /tmp/entrypoint.sh
 RUN sudo chmod +x /tmp/entrypoint.sh
 
+# add test data
+COPY data /workspace
+
 ENTRYPOINT ["/tmp/entrypoint.sh"]
 CMD ["tail", "-f", "/dev/null"]
