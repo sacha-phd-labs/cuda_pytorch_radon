@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-# Ensure mlflow directory is writable
-chown -R 1001:1001 /workspace/mlflow
-
 # Clone repositories for editable installs
 REPOS_DIR="/workspace"
 OWNER="sacha-phd-labs"
