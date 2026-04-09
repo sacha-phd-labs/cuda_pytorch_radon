@@ -8,7 +8,7 @@ x-cuda_pytorch_base: &cuda_pytorch_base
     PYTHONUNBUFFERED: "1"
     MLFLOW_TRACKING_URI: "http://mlflow:5000"
   depends_on:
-    - mlflow
+    - sacha-phd-mlflow
   networks:
     - mlflow-net
   restart: unless-stopped
