@@ -17,6 +17,10 @@ declare -A REPOS=(
 
 # Clone each repository
 for repo_name in "${!REPOS[@]}"; do
+    if [ -d "$REPOS_DIR/$repo_name/.git" ]; then
+        echo "Repository $repo_name already exists in $REPOS_DIR. Skipping clone."
+        continue
+    fi
     repo_url="${REPOS[$repo_name]}"
     echo "Cloning $repo_name from $repo_url..."
     git clone "$repo_url" "$REPOS_DIR/$repo_name"
