@@ -6,7 +6,7 @@ x-cuda_pytorch_base: &cuda_pytorch_base
   shm_size: 8g
   environment:
     PYTHONUNBUFFERED: "1"
-    MLFLOW_TRACKING_URI: "http://mlflow:5000"
+    MLFLOW_TRACKING_URI: "http://sacha-phd-mlflow:5000"
   depends_on:
     - sacha-phd-mlflow
   networks:
