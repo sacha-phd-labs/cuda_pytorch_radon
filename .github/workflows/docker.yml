@@ -5,7 +5,7 @@ on:
         branches:
             - main
         paths:
-            - dockerfiles/**
+            - dockerfiles/pytorch_parallelproj/**
     workflow_dispatch:
 
 permissions:
@@ -46,8 +46,8 @@ jobs:
             - name: Build and push
               uses: docker/build-push-action@v6
               with:
-                context: dockerfiles/cuda_pytorch
-                file: dockerfiles/cuda_pytorch/Dockerfile
+                context: dockerfiles/pytorch_parallelproj
+                file: dockerfiles/pytorch_parallelproj/Dockerfile
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
