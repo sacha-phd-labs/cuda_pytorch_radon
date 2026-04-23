@@ -5,7 +5,7 @@ on:
         branches:
             - main
         paths:
-            - dockerfiles/cuda_pytorch/**
+            - dockerfiles/**
     workflow_dispatch:
 
 permissions:
