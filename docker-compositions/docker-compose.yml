@@ -6,7 +6,7 @@ x-ml_base: &ml_base
   shm_size: 8g
   environment:
     PYTHONUNBUFFERED: "1"
-    MLFLOW_TRACKING_URI: "http://sacha-phd-mlflow:5000"
+    MLFLOW_TRACKING_URI: "http://sacha-phd-mlflow:5001"
   depends_on:
     - sacha-phd-mlflow
   networks:
@@ -19,16 +19,17 @@ services:
     image: ghcr.io/mlflow/mlflow:latest
     container_name: sacha-phd-mlflow
     ports:
-      - "5000:5000"
+      - "5001:5001"
+      - "2250:5001"
     command: >
       mlflow server
       --host 0.0.0.0
-      --port 5000
-      --backend-store-uri sqlite:////mlflow/mlflow.db
-      --default-artifact-root /mlflow/artifacts
+      --port 5001
+      --backend-store-uri sqlite:////mlflow-sacha-phd-labs/mlflow.db
+      --default-artifact-root /mlflow-sacha-phd-labs/artifacts
       --allowed-hosts "*"
     volumes:
-      - /mlflow:/mlflow
+      - /mlflow-sacha-phd-labs:/mlflow-sacha-phd-labs
     restart: unless-stopped
     networks:
       - mlflow-net
@@ -38,7 +39,7 @@ services:
     container_name: sacha-phd-pytorch_parallelproj
     image: ghcr.io/sacha-phd-labs/pytorch_parallelproj:latest
     volumes:
-      - /mlflow:/mlflow
+      - /mlflow-sacha-phd-labs:/mlflow-sacha-phd-labs
 
 networks:
   mlflow-net:
